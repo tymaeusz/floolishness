@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gerador de Cancelamento</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 100px;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 0;
+    }
+    h2 {
+      font-size: 2em;
+      margin-top: 0;
+      margin-bottom: 30px;
+    }
+    input {
+      font-size: 1.2em;
+      padding: 5px;
+      width: 300px;
+      margin-bottom: 10px;
+    }
+    button {
+      font-size: 1.2em;
+      padding: 10px 20px;
+      background-color: #ddd;
+      border: none;
+      cursor: pointer;
+    }
+    #resultado {
+      margin-top: 30px;
+      font-size: 1.5em;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+      word-wrap: break-word;
+    }
+    .erro-assustador {
+      color: red;
+      font-weight: bold;
+      animation: piscar 0.8s infinite alternate;
+    }
+    @keyframes piscar {
+      from { opacity: 1; }
+      to { opacity: 0.3; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Gerador de<br/>cancelamento</h1>
+  <label for="nome">Meu nome:</label>
+  <input type="text" id="nome" placeholder="Digite o nome..." />
+  <br />
+  <button onclick="cancelar()">Gerar meu cancelamento</button>
+
+  <div id="resultado"></div>
+
+  <script>
+    // Motivos genéricos de cancelamento
+    let motivosCancelamento = [];
+
+    // Carrega os motivos via fetch
+    async function carregarMotivos() {
+    try {
+        const resposta = await fetch('https://exemplo.com/motivos.json'); // <-- Substitua com a URL real
+        if (!resposta.ok) throw new Error("Erro ao carregar motivos.");
+        motivosCancelamento = await resposta.json();
+    } catch (erro) {
+        console.error("Erro ao buscar motivos de cancelamento:", erro);
+        motivosCancelamento = ["motivo desconhecido (falha na carga de dados)."];
+    }
+    }
+
+    // Garante que o fetch ocorre antes de tudo
+    carregarMotivos();
+
+
+    
+    // Mensagem especial para tymaeus
+    const CANCELAMENTO_TYMAEUS = `
+      <span class="erro-assustador">
+        ERRO FATAL: tymaeus foi cancelado(a) por ser uma ameaça arcana de nível desconhecido. 
+        Ocultamento falhou. O vazio está te observando.
+      </span>
+    `;
+  
+    function cancelar() {
+      const campoNome = document.getElementById("nome");
+      const resultadoElemento = document.getElementById("resultado");
+  
+      try {
+        const nomeUsuario = campoNome.value.trim().toLowerCase();
+  
+        if (!nomeUsuario) {
+          resultadoElemento.innerHTML = "";
+          return;
+        }
+  
+        if (nomeUsuario === "tymaeus") {
+          resultadoElemento.innerHTML = CANCELAMENTO_TYMAEUS;
+          return;
+        }
+  
+        const motivoAleatorio = obterMotivoAleatorio(MOTIVOS_CANCELAMENTO);
+        resultadoElemento.innerHTML = `
+          <strong>${nomeUsuario}</strong> foi cancelado(a) por: <strong>${motivoAleatorio}</strong>`;
+          
+      } catch (erro) {
+        console.error("Erro ao gerar cancelamento:", erro);
+        resultadoElemento.innerHTML = `
+          <span class="erro-assustador">
+            Ocorreu um erro inesperado. O sistema de cancelamento foi comprometido.
+          </span>`;
+      }
+    }
+  
+    function obterMotivoAleatorio(lista) {
+      const indice = Math.floor(Math.random() * lista.length);
+      return lista[indice];
+    }
+  </script>
+  
+</body>
+</html>
