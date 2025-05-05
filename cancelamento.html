@@ -5,26 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Gerador de Cancelamento</title>
   <style>
+    @font-face {
+      font-family: 'Cybrpnuk';
+      src: url('./fonts/Cybrpnuk2.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+  
     body {
       font-family: Arial, sans-serif;
       text-align: center;
       margin-top: 100px;
     }
+  
     h1 {
       font-size: 2.5em;
       margin-bottom: 0;
     }
+  
     h2 {
       font-size: 2em;
       margin-top: 0;
       margin-bottom: 30px;
     }
+  
     input {
       font-size: 1.2em;
       padding: 5px;
       width: 300px;
       margin-bottom: 10px;
     }
+  
     button {
       font-size: 1.2em;
       padding: 10px 20px;
@@ -32,6 +43,7 @@
       border: none;
       cursor: pointer;
     }
+  
     #resultado {
       margin-top: 30px;
       font-size: 1.5em;
@@ -40,16 +52,68 @@
       margin-right: auto;
       word-wrap: break-word;
     }
+  
     .erro-assustador {
-      color: red;
-      font-weight: bold;
-      animation: piscar 0.8s infinite alternate;
-    }
-    @keyframes piscar {
-      from { opacity: 1; }
-      to { opacity: 0.3; }
-    }
+  font-family: 'Cybrpnuk', monospace;
+  color: #d9b3ff;
+  font-weight: bold;
+  display: inline-block;
+
+  /* Contorno escuro + sombra roxa reduzida */
+  text-shadow:
+    0 0 2px #000000,   /* contorno escuro */
+    0 0 4px #b266ff,
+    0 0 6px #9933ff,
+    0 0 8px #8000ff;
+
+  animation: eletricidadeRoxa 0.25s infinite;
+}
+
+@keyframes eletricidadeRoxa {
+  0% {
+    text-shadow:
+      0 0 2px #000000,
+      0 0 4px #b266ff,
+      0 0 6px #9933ff,
+      0 0 8px #8000ff;
+    transform: translate(0, 0) skew(0deg);
+  }
+  25% {
+    text-shadow:
+      0 0 2px #000000,
+      0 0 5px #b266ff,
+      0 0 7px #9933ff,
+      0 0 9px #8000ff;
+    transform: translate(-0.5px, 0.3px) skew(-0.5deg);
+  }
+  50% {
+    text-shadow:
+      0 0 2px #000000,
+      0 0 6px #cc80ff,
+      0 0 8px #a64dff,
+      0 0 10px #8000ff;
+    transform: translate(0.7px, -0.4px) skew(0.3deg);
+  }
+  75% {
+    text-shadow:
+      0 0 2px #000000,
+      0 0 5px #b266ff,
+      0 0 7px #9933ff,
+      0 0 9px #8000ff;
+    transform: translate(-0.3px, 0.6px) skew(-0.2deg);
+  }
+  100% {
+    text-shadow:
+      0 0 2px #000000,
+      0 0 4px #b266ff,
+      0 0 6px #9933ff,
+      0 0 8px #8000ff;
+    transform: translate(0, 0) skew(0deg);
+  }
+}
+
   </style>
+      
 </head>
 <body>
   <h1>Gerador de<br/>cancelamento</h1>
@@ -67,7 +131,7 @@
     // Carrega os motivos via fetch
     async function carregarMotivos() {
     try {
-        const resposta = await fetch('https://exemplo.com/motivos.json'); // <-- Substitua com a URL real
+        const resposta = await fetch('https://raw.githubusercontent.com/tymaeusz/floolishness/main/data.json');
         if (!resposta.ok) throw new Error("Erro ao carregar motivos.");
         motivosCancelamento = await resposta.json();
     } catch (erro) {
@@ -80,11 +144,11 @@
     carregarMotivos();
 
 
-    
+
     // Mensagem especial para tymaeus
     const CANCELAMENTO_TYMAEUS = `
       <span class="erro-assustador">
-        ERRO FATAL: tymaeus foi cancelado(a) por ser uma ameaça arcana de nível desconhecido. 
+        ERRO FATAL: tymaeus foi cancelado(a) por ser uma calamidade arcana de nível desconhecido. 
         Ocultamento falhou. O vazio está te observando.
       </span>
     `;
@@ -106,7 +170,7 @@
           return;
         }
   
-        const motivoAleatorio = obterMotivoAleatorio(MOTIVOS_CANCELAMENTO);
+        const motivoAleatorio = obterMotivoAleatorio(motivosCancelamento);
         resultadoElemento.innerHTML = `
           <strong>${nomeUsuario}</strong> foi cancelado(a) por: <strong>${motivoAleatorio}</strong>`;
           
